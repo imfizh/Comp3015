@@ -93,9 +93,9 @@ diffuse = texColor * floor( sDotN * levels ) * scaleFactor;
 if( sDotN > 0.0 )
 {
 vec3 v = normalize(-pos.xyz);
-      vec3 h = normalize(v+s);
+      vec3 h = normalize(v+s);  //half vector
       vec3 r = reflect( -s, normal );
-      spec = Material.Ks * pow( max( dot(r,v), 0.0 ), Material.Shininess );
+      spec = Material.Ks * pow( max( dot(h,v), 0.0 ), Material.Shininess );
 }
 }
 return ambient + spotScale * Spot.L * (diffuse + spec);
