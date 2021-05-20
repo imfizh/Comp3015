@@ -11,6 +11,7 @@ flat out int GIsEdge;
 
 in vec3 vn[];
 in vec3 vpos[];
+//in vec4 vpos[];
 in vec2 vTexCoord[];
 
 uniform float EdgeWidth;

@@ -19,6 +19,10 @@ class SceneBasic_Uniform : public Scene
 {
 private:
     GLSLProgram prog;
+    //GLSLProgram prog, solidProg;
+    //GLuint shadowFBO, pass1Index, pass2Index;
+    float time;
+    float angle;
     glm::mat4 viewport;
 
     void setMatrices();
