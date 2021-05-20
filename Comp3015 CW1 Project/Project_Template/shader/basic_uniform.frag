@@ -3,19 +3,21 @@
 //in variable that receives the diffuse calculation from the vertex shader
 //in vec3 LightIntensity;
 //in vec3 Colour;
-in vec3 pos;
-in vec3 n;
-in vec2 TexCoord;
+// in vec3 pos;
+// in vec3 n;
+// in vec2 TexCoord;
+
+in vec2 gTexCoord;
+in vec3 gPos;
+in vec3 gNormal;
+uniform vec4 LineColor;
+flat in int GIsEdge;
 
 //out variable, this typical for all fragment shaders
 layout (location = 0) out vec4 FragColor;
 layout(binding=0) uniform sampler2D BrickTex;
 layout(binding=1) uniform sampler2D MossTex;
 layout(binding=2) uniform sampler2D ZebTex;
-
-//layout(binding=0) uniform sampler2D BaseTex;
-//layout(binding=1) uniform sampler2D AlphaTex;
-
 
 uniform struct SpotLightInfo {
 vec3 Position; // Position in cam coords
@@ -26,7 +28,11 @@ float Exponent; // Angular attenuation exponent
 float Cutoff; // Cutoff angle (between 0 and pi/2)
 float testNumb;
 } Spot;
-//Spot[3];
+
+uniform struct LightInfo{
+vec3 Position;
+vec3 Intensity;
+} Light;
 
 
 //material information struct
@@ -49,32 +55,30 @@ float MinDist; //min distance
 vec3 Color; //colour of the fog
 } Fog;
 
-
+//vec3 toonShade(){
+  //vec3 s = normalize( Light.Position.xyz - gPos.xyz);
+  //vec3 ambient = Material.Ka;
+  //float cosine = dot(s, gNormal);
+  //vec3 diffuse = Material.Kd * ceil(cosine *levels)*scaleFactor;
+  //return Light.Intensity *(ambient+diffuse);
+//}
 vec3 blinnPhongSpot( vec3 position, vec3 normal ) {
 
-  //vec4 brickTexColor = texture(BrickTex, TexCoord);
-  //vec4 mossTexColor = texture(MossTex, TexCoord);
-  //vec3 col = mix(brickTexColor.rgb, mossTexColor.rgb, mossTexColor.a);
-  //vec3 ambient = Spot.La * col;
+//vec4 zebTexColor = texture(ZebTex, TexCoord);
+ vec4 zebTexColor = texture(ZebTex, gTexCoord);
+//vec3 texColor = texture(ZebTex, TexCoord).rgb;
+ vec3 texColor = texture(ZebTex, gTexCoord).rgb;
 
-  //vec3 texColor = texture(BaseTex, TexCoord).rgb;
-  //vec3 ambient = Spot.La * texColor;
-
-
-vec4 zebTexColor = texture(ZebTex, TexCoord);
-vec3 texColor = texture(ZebTex, TexCoord).rgb;
-
-if(Spot.testNumb == 1.0f){
+ if(Spot.testNumb == 1.0f){
 //vec4 brickTexColor = texture(BrickTex, TexCoord);
-//texColor = texture(BrickTex, TexCoord).rgb;
-vec4 brickTexColor = texture(BrickTex, TexCoord);
-vec4 mossTexColor = texture(MossTex, TexCoord);
-texColor = mix(brickTexColor.rgb, mossTexColor.rgb, mossTexColor.a);
+ vec4 brickTexColor = texture(BrickTex, gTexCoord);
+//vec4 mossTexColor = texture(MossTex, TexCoord);
+ vec4 mossTexColor = texture(MossTex, gTexCoord);
+ texColor = mix(brickTexColor.rgb, mossTexColor.rgb, mossTexColor.a);
 }
 
 vec3 ambient = Spot.La * texColor;
 
-  //vec3 ambient = Material.Ka * Spot.La; 
 vec3 s = normalize(vec3(Spot.Position) - position);
 float cosAng = dot(-s, normalize(Spot.Direction)); //cosine of the angle
 float angle = acos( cosAng ); //gives you the actual angle
@@ -85,14 +89,12 @@ if(angle < Spot.Cutoff )
 {
 spotScale = pow( cosAng, Spot.Exponent );
 float sDotN = max( dot(s,normal), 0.0 );
-  //diffuse = Material.Kd * floor( sDotN * levels ) * scaleFactor;  // diffuse calculation for spot light
-  //diffuse = col * floor( sDotN * levels ) * scaleFactor; // diffuse calculation for multi texture
 diffuse = texColor * floor( sDotN * levels ) * scaleFactor;
-  //diffuse = Material.Kd * sDotN;
 
 if( sDotN > 0.0 )
 {
-vec3 v = normalize(-pos.xyz);
+//vec3 v = normalize(-pos.xyz);
+vec3 v = normalize(-gPos.xyz);
       vec3 h = normalize(v+s);  //half vector
       vec3 r = reflect( -s, normal );
       spec = Material.Ks * pow( max( dot(h,v), 0.0 ), Material.Shininess );
@@ -100,7 +102,6 @@ vec3 v = normalize(-pos.xyz);
 }
 return ambient + spotScale * Spot.L * (diffuse + spec);
 }
-
 
 void main()
 {
@@ -112,16 +113,16 @@ void main()
     //FragColor = vec4(Colour, 1.0);
      //FragColor = vec4(blinnPhongSpot(pos, normalize(n)), 1);  //just uncomment this to get code to work without fog
   
-    float dist = abs( pos.z ); //distance calculations
-    //fogFactor calculation based on the formula presented earlier
-    float fogFactor = (Fog.MaxDist - dist) / (Fog.MaxDist - Fog.MinDist);
-    fogFactor = clamp( fogFactor, 0.0, 1.0 ); //we clamp values
-    //colour we receive from blinnPhong calculation
-    vec3 shadeColor = blinnPhongSpot(pos, normalize(n));
-    //we assign a colour based on the fogFactor using mix
-    vec3 color = mix( Fog.Color, shadeColor, fogFactor );
-    //vec3 color = mix( Fog.Color, Colour, fogFactor );
-    FragColor = vec4(color, 1.0); //final colour
+   // float dist = abs( pos.z ); //distance calculations
+   // //fogFactor calculation based on the formula presented earlier
+   // float fogFactor = (Fog.MaxDist - dist) / (Fog.MaxDist - Fog.MinDist);
+   // fogFactor = clamp( fogFactor, 0.0, 1.0 ); //we clamp values
+   // //colour we receive from blinnPhong calculation
+   // vec3 shadeColor = blinnPhongSpot(pos, normalize(n));
+   // //we assign a colour based on the fogFactor using mix
+   // vec3 color = mix( Fog.Color, shadeColor, fogFactor );
+   // //vec3 color = mix( Fog.Color, Colour, fogFactor );
+   // FragColor = vec4(color, 1.0); //final colour
 
    // vec4 alphaMap = texture(AlphaTex, TexCoord);
    // if( alphaMap.a < 0.15 ){
@@ -129,4 +130,11 @@ void main()
    // } else {
    //    FragColor = vec4( blinnPhongSpot(pos,normalize(n)), 1.0 );
    // }
+
+   if(GIsEdge == 1){
+     FragColor = LineColor;
+   } else{
+     //FragColor = vec4( toonShade(), 1.0);
+     FragColor = vec4( blinnPhongSpot(gPos,normalize(gNormal)), 1.0 );
+   }
 }

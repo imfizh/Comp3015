@@ -14,14 +14,23 @@ float tPrev;
 float angle;
 
 SceneBasic_Uniform::SceneBasic_Uniform() : plane(50.0f, 50.0f, 1, 1), teapot(14, glm::mat4(1.0f)), torus(1.75f * 0.75f, 0.75f * 0.75f, 50, 50) {
-    mesh = ObjMesh::load("media/zebra.obj",true);
+    mesh = ObjMesh::loadWithAdjacency("media/zebra.obj",true);
 }
 
 void SceneBasic_Uniform::initScene()
 {
     compile();
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-
+    
+    prog.setUniform("EdgeWidth", 0.015f);
+    prog.setUniform("PctExtend", 0.25f);
+    prog.setUniform("LineColor", vec4(0.05f,0.0f,0.05f,1.0f));
+    prog.setUniform("Material.Kd", 0.7f,0.5f,0.2f);
+    prog.setUniform("Material.Ka", 0.2f,0.2f,0.2f);
+    //prog.setUniform("Light.Position", vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    //prog.setUniform("Light.Intensity", 1.0f, 1.0f, 1.0f);
+    
     projection = mat4(1.0f);
     prog.setUniform("Spot.L", vec3(10.0f));
     prog.setUniform("Spot.La", vec3(0.5f));
@@ -44,9 +53,10 @@ void SceneBasic_Uniform::initScene()
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, zeb);
 
-    prog.setUniform("Fog.MaxDist", 30.0f);
+  /*  prog.setUniform("Fog.MaxDist", 30.0f);
     prog.setUniform("Fog.MinDist", 1.0f);
-    prog.setUniform("Fog.Color", vec3(0.4f, 0.4f, 0.4f));
+    prog.setUniform("Fog.Color", vec3(0.4f, 0.4f, 0.4f));*/
+    
 }
 
 void SceneBasic_Uniform::compile()
@@ -54,6 +64,7 @@ void SceneBasic_Uniform::compile()
 	try {
 		prog.compileShader("shader/basic_uniform.vert");
 		prog.compileShader("shader/basic_uniform.frag");
+        prog.compileShader("basic_uniform.gs");
 		prog.link();
 		prog.use();
 	} catch (GLSLProgramException &e) {
@@ -82,8 +93,9 @@ void SceneBasic_Uniform::render()
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      vec4 lightPos = vec4(10.0f, 30.0f, 0.0f, 1.0f);
-      prog.setUniform("Spot.Position", vec3(view * lightPos));
+ 
+    vec4 lightPos = vec4(10.0f, 30.0f, 0.0f, 1.0f);
+    prog.setUniform("Spot.Position", vec3(view * lightPos));
     //vec4 lightPos = vec4(10.0f * cos(angle), 5.0f, 5.0f * sin(angle), 0.5f);
     //prog.setUniform("Spot.Position", view * lightPos);
     mat3 normalMatrix = mat3(vec3(view[0]), vec3(view[1]), vec3(view[2]));
@@ -152,6 +164,7 @@ void SceneBasic_Uniform::setMatrices()
     prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2]))); //we set the uniform for normal matrix
     
     prog.setUniform("MVP", projection * mv); //we set the model view matrix by multiplying the mv with the projection matrix
+
 }
 
 void SceneBasic_Uniform::resize(int w, int h)

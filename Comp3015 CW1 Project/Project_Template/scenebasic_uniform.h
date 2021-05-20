@@ -19,9 +19,7 @@ class SceneBasic_Uniform : public Scene
 {
 private:
     GLSLProgram prog;
-    
-    //Torus torus;
-    //Teapot teapot;
+    glm::mat4 viewport;
 
     void setMatrices();
 

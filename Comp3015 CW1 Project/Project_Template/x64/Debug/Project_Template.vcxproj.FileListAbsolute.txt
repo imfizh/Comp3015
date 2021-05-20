@@ -2,3 +2,6 @@ C:\Users\Lukex\Documents\Uni\Year 3\Comp3015 (graphics pipeline)\Comp3015 CW1 Pr
 C:\Users\Lukex\Documents\Uni\Year 3\Comp3015 (graphics pipeline)\Comp3015 CW1 Project\Project_Template\x64\Debug\Project_Template.pdb
 C:\Users\Lukex\Documents\Uni\Year 3\Comp3015\Comp3015\Comp3015 CW1 Project\Project_Template\x64\Debug\Project_Template.exe
 C:\Users\Lukex\Documents\Uni\Year 3\Comp3015\Comp3015\Comp3015 CW1 Project\Project_Template\x64\Debug\Project_Template.pdb
+C:\Users\Lukex\Documents\Uni\Year 3\Comp3015\Comp3015\Comp3015 CW1 Project\Project_Template\x64\Debug\Project_Template.vcxproj.MdMergeInputs.cache
+C:\Users\Lukex\Documents\Uni\Year 3\Comp3015\Comp3015\Comp3015 CW1 Project\Project_Template\x64\Debug\Project_Template.vcxproj.cppwinrt_plat.cache
+C:\Users\Lukex\Documents\Uni\Year 3\Comp3015\Comp3015\Comp3015 CW1 Project\Project_Template\x64\Debug\Project_Template.vcxproj.cppwinrt_comp.cache

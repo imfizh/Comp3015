@@ -8,9 +8,9 @@ layout (location = 2) in vec2 VertexTexCoord;
 //out vector needed for the fragment shader
 //out vec3 LightIntensity; 
 //out vec3 Colour;  // part of multiple light set up
-out vec3 pos;
-out vec3 n;
-out vec2 TexCoord;
+out vec3 vpos;
+out vec3 vn;
+out vec2 vTexCoord;
  
 
 //uniforms for matrices required in the shader
@@ -22,10 +22,12 @@ uniform mat4 ProjectionMatrix;
 
 void main() 
 { 
-   n = normalize( NormalMatrix * VertexNormal);
-   pos = (ModelViewMatrix * vec4(VertexPosition,1.0)).xyz;
+   //n = normalize( NormalMatrix * VertexNormal);
+   vn = normalize( NormalMatrix * VertexNormal);
+   //pos = (ModelViewMatrix * vec4(VertexPosition,1.0)).xyz;
+   vpos = vec3(ModelViewMatrix * vec4(VertexPosition,1.0));
 
-   TexCoord = VertexTexCoord;
+   vTexCoord = VertexTexCoord;
 
   //turns any vertex position into model view projection in preparations to 
   //graphics pipeline processes before fragment shader (clipping)
