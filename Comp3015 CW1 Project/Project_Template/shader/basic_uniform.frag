@@ -1,5 +1,10 @@
 #version 460
 
+uniform float Gamma;
+uniform float LowThreshold;
+uniform float HighThreshold;
+
+
 in vec2 gTexCoord;
 in vec3 gPos;
 in vec3 gNormal;
@@ -138,11 +143,18 @@ void main()
    // FragColor = vec4(color, 1.0); //final colour
 
 
+
+
    if(GIsEdge == 1){
      FragColor = LineColor;
    } else{
+
+   vec4 noise = texture(MossTex, gTexCoord);    // uses noise and thresholds to create a disintigration effect;
+   if( noise.a < LowThreshold || noise.a > HighThreshold)
+   discard; 
      //FragColor = vec4( toonShade(), 1.0);
-     FragColor = vec4( blinnPhongSpot(gPos,normalize(gNormal)), 1.0 );
+     //FragColor = vec4( blinnPhongSpot(gPos,normalize(gNormal)), 1.0 );
+     FragColor = vec4( pow( blinnPhongSpot(gPos,normalize(gNormal)), vec3(1.0/Gamma) ), 1.0 );  // use of gamma correction
    }
 
    //RenderPass();

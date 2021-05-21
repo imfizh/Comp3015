@@ -22,6 +22,9 @@ void SceneBasic_Uniform::initScene()
     compile();
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
+    prog.setUniform("Gamma", 2.2f);
+    prog.setUniform("LowThreshold",0.4f);
+    prog.setUniform("HighThreshold",1.0f);
     
 
     prog.setUniform("EdgeWidth", 0.01f);
@@ -168,7 +171,7 @@ void SceneBasic_Uniform::render()
     prog.setUniform("Spot.testNumb", 1.0f);
     prog.setUniform("Wiggle.wiggle", true);
     model = mat4(1.0f);
-    model = glm::scale(model, vec3(2.0f, 2.0f, 2.0f));
+    model = glm::scale(model, vec3(5.0f, 2.0f, 5.0f));
     setMatrices();
     mesh->render();
 }
