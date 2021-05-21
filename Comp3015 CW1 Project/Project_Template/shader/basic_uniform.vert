@@ -27,6 +27,10 @@ uniform float Freq = 2.5;
 uniform float Velocity = 2.5;
 uniform float Amp = 0.6;
 
+uniform struct WiggleInfo{
+ bool wiggle;
+}Wiggle;
+
 //shadow variables
 //out vec4 ShadowCoord;
 //uniform mat4 ShadowMatrix;
@@ -39,22 +43,39 @@ void main()
    //vpos = vec3(ModelViewMatrix * vec4(VertexPosition,1.0));
    // vpos = (ModelViewMatrix * vec4(VertexPosition,1.0)).xyz;
    //ShadowCoord = ShadowMatrix *vec4(VertexPosition,1.0);
-   
-   vec4 pos = vec4(VertexPosition,1.0);
-   float u = Freq * pos.x - Velocity * Time;
-   pos.y = Amp * sin( u );
 
-   vec3 n = vec3(0.0);
-   n.xy = normalize(vec2(cos( u ), 1.0));
+  // vec4 pos = vec4(VertexPosition,1.0);
+  // float u = Freq * pos.x - Velocity * Time;
+  // pos.y = Amp * sin( u );
 
-   vpos = vec3(ModelViewMatrix * pos);
-   vn = NormalMatrix * n;
+  // vec3 n = vec3(0.0);
+  // n.xy = normalize(vec2(cos( u ), 1.0));
+
+  // vpos = vec3(ModelViewMatrix * pos);
+  // vn = NormalMatrix * n;
 
 
    vTexCoord = VertexTexCoord;
 
   //gl_Position = MVP * vec4(VertexPosition,1.0); 
-  gl_Position = MVP * pos;
+
+ // gl_Position = MVP * pos;
+
+ 
+  if(Wiggle.wiggle == true){
+   vec4 pos = vec4(VertexPosition,1.0);
+   float u = Freq * pos.x - Velocity * Time;
+   pos.y = Amp * sin( u );
+   vec3 n = vec3(0.0);
+   n.xy = normalize(vec2(cos( u ), 1.0));
+   vpos = vec3(ModelViewMatrix * pos);
+   vn = NormalMatrix * n;
+   gl_Position = MVP * pos;
+  }else{
+  vn = normalize( NormalMatrix * VertexNormal);
+  vpos = (ModelViewMatrix * vec4(VertexPosition,1.0)).xyz;
+  gl_Position = MVP * vec4(VertexPosition,1.0);
+  }
 } 
 
 

@@ -153,6 +153,7 @@ void SceneBasic_Uniform::render()
     prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
     prog.setUniform("Material.Ka", 0.5f, 0.5f, 0.5f);
     prog.setUniform("Material.Shininess", 10.0f);
+    prog.setUniform("Wiggle.wiggle", false);
     model = mat4(1.0f);
     model = glm::scale(model, vec3(2.0f, 2.0f, 2.0f));
     model = glm::translate(model, vec3(3.0f, 3.0f, 0.0f));
@@ -160,6 +161,16 @@ void SceneBasic_Uniform::render()
     setMatrices();
     mesh->render();
 
+    prog.setUniform("Material.Kd", 0.4f, 0.4f, 0.4f);
+    prog.setUniform("Material.Ks", 0.9f, 0.9f, 0.9f);
+    prog.setUniform("Material.Ka", 0.5f, 0.5f, 0.5f);
+    prog.setUniform("Material.Shininess", 90.0f);
+    prog.setUniform("Spot.testNumb", 1.0f);
+    prog.setUniform("Wiggle.wiggle", true);
+    model = mat4(1.0f);
+    model = glm::scale(model, vec3(2.0f, 2.0f, 2.0f));
+    setMatrices();
+    mesh->render();
 }
 
 void SceneBasic_Uniform::setMatrices()

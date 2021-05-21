@@ -14,6 +14,7 @@ in vec3 vpos[];
 //in vec4 vpos[];
 in vec2 vTexCoord[];
 
+
 uniform float EdgeWidth;
 uniform float pctExtend;
 
@@ -38,6 +39,7 @@ void emitEdgeQuad(vec3 e0, vec3 e1)
 }
 
 void main(){
+
 vec3 p0 = gl_in[0].gl_Position.xyz / gl_in[0].gl_Position.w;
 vec3 p1 = gl_in[1].gl_Position.xyz / gl_in[1].gl_Position.w;
 vec3 p2 = gl_in[2].gl_Position.xyz / gl_in[2].gl_Position.w;

@@ -83,6 +83,7 @@ vec3 Color; //colour of the fog
 //}
 vec3 blinnPhongSpot( vec3 position, vec3 normal ) {
 
+
 //vec4 zebTexColor = texture(ZebTex, TexCoord);
  vec4 zebTexColor = texture(ZebTex, gTexCoord);
 //vec3 texColor = texture(ZebTex, TexCoord).rgb;
