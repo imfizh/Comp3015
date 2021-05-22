@@ -12,7 +12,6 @@ using glm::vec4;
 using glm::mat3;
 float tPrev;
 float angle;
-
 SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(50.0f, 50.0f, 1, 1), teapot(14, glm::mat4(1.0f)), torus(1.75f * 0.75f, 0.75f * 0.75f, 50, 50) {
     mesh = ObjMesh::loadWithAdjacency("media/zebra.obj",true);
 }
@@ -23,7 +22,7 @@ void SceneBasic_Uniform::initScene()
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
     prog.setUniform("Gamma", 2.2f);
-    prog.setUniform("LowThreshold",0.4f);
+    prog.setUniform("LowThreshold",0.2f);
     prog.setUniform("HighThreshold",1.0f);
     
 
@@ -80,6 +79,7 @@ void SceneBasic_Uniform::compile()
 
 void SceneBasic_Uniform::update( float t )
 {
+   
     time = t;
 	//update your angle here
     float deltaT = t - tPrev;
