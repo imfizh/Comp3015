@@ -7,6 +7,10 @@ o Which version Visual Studio and Operating System you used to test/write the co
 o What did you start with?
 - This project was built upon the "Project Template Diffuse" project template provided as part of the Comp3015 module
 
+o How to open the project?
+- The build for this project is named "Project_Template" can be found in the folder called "Build", running the executable will open the solution
+- The Visual Studio solution for this project can be found in the "Comp3015 CW2 solution", under the name "Project_Template.sln"
+
 o How does it work?
 - For the project I've set up a simple scene using two Zebra models I created. The first of which uses a zebra texture image I also made, whilst
   the other uses the moss texture that comes with the project template. Within the fragment shader the Blinn Phong shading model has been set up.
